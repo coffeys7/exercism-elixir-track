@@ -3,13 +3,16 @@ defmodule WordCount do
   Count the number of words in the sentence.
 
   Words are compared case-insensitively.
+  Enum.reduce(%{}, fn x, acc -> Map.update(acc, x, 1, &(&1 + 1)) end)
   """
   @spec count(String.t()) :: map
   def count(sentence) do
     sentence
       |> String.downcase
-      |> String.split(" ")
-      
+      |> String.replace("_", " ")
+      |> String.replace(~r/[\!\&\@\$\%\^\&\,\:]/, "")
+      |> String.split(" ", trim: true)
+      |> Enum.reduce(%{}, fn s, acc -> Map.update(acc, s, 1, &(&1 + 1)) end)
   end
 
 end
